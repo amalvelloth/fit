@@ -14,7 +14,7 @@ const getAllCards = async (req, res) => {
 const addCard = async (req, res) => {
   const card = new Card({
     title: req.body.title,
-    description: req.body.description,
+    column: req.body.column,
   });
 
   try {

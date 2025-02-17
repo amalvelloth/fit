@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", getAllCards);
 router.post("/", addCard);
-
+router.put("/:id",cardController.updateCardColumn);
 router.delete("/:id", cardController.deleteCard);
 
 module.exports = router;

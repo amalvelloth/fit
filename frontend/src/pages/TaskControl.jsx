@@ -47,6 +47,7 @@ const Board = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          id: card.id,
           title: card.title,
           column: card.column
         })
