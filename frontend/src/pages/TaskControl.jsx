@@ -41,22 +41,23 @@ const Board = () => {
 
   const updateCardsOrderInBackend = async (card) => {
     try {
+      console.log('Updating card:', card);
+      
       const response = await fetch(`http://localhost:5000/cards/${card.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: card.id,
           title: card.title,
-          column: card.column
+          column: card.column,
         })
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update card');
       }
-  
+
       return await response.json();
     } catch (error) {
       console.error('Error updating card:', error);
@@ -64,24 +65,25 @@ const Board = () => {
     }
   };
   
-  const handleUpdateCards = async (updatedCards) => {
-    if (!updatedCards) return;
-    
+  const handleUpdateCards = async (cards) => {
     try {
-      // Update one card at a time
-      for (const card of updatedCards) {
-        const normalizedCard = {
-          id: card._id || card.id,
-          title: card.title,
-          column: card.column
-        };
-        
-        await updateCardsOrderInBackend(normalizedCard);
-      }
+      const response = await fetch(`http://localhost:5000/cards`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cards }),
+      });
+
+      const data = await response.json();
       
-      setCards(updatedCards);
+      if (data.cards) {
+        setCards(data.cards);
+      } else if (data.error) {
+        console.error('Error updating cards:', data.error);
+      }
     } catch (error) {
-      console.error('Failed to update cards:', error);
+      console.error('Error updating cards:', error);
     }
   };
 
@@ -93,6 +95,7 @@ const Board = () => {
         headingColor="text-neutral-500"
         cards={cards}
         setCards={handleUpdateCards}
+        updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
         title="TODO"
@@ -100,6 +103,7 @@ const Board = () => {
         headingColor="text-yellow-200"
         cards={cards}
         setCards={handleUpdateCards}
+        updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
         title="In progress"
@@ -107,6 +111,7 @@ const Board = () => {
         headingColor="text-blue-200"
         cards={cards}
         setCards={handleUpdateCards}
+        updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
         title="Complete"
@@ -114,13 +119,14 @@ const Board = () => {
         headingColor="text-emerald-200"
         cards={cards}
         setCards={handleUpdateCards}
+        updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <BurnBarrel setCards={handleUpdateCards} />
     </div>
   );
 };
 
-const Column = ({ title, headingColor, cards, column, setCards }) => {
+const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrderInBackend }) => {
   const [active, setActive] = useState(false);
   const [draggedCard, setDraggedCard] = useState(null);
 
@@ -160,18 +166,23 @@ const Column = ({ title, headingColor, cards, column, setCards }) => {
       const [movedCard] = updatedCards.splice(cardIndex, 1);
       movedCard.column = column;
 
-      if (before === "-1") {
-        updatedCards.push(movedCard);
-      } else {
-        const insertIndex = updatedCards.findIndex((c) => c.id === before);
-        if (insertIndex !== -1) {
-          updatedCards.splice(insertIndex, 0, movedCard);
-        } else {
-          updatedCards.push(movedCard);
-        }
-      }
+      console.log('Card being updated:', movedCard);
 
-      setCards(updatedCards);
+      updateCardsOrderInBackend(movedCard)
+        .then(() => {
+          if (before === "-1") {
+            updatedCards.push(movedCard);
+          } else {
+            const insertIndex = updatedCards.findIndex((c) => c.id === before);
+            if (insertIndex !== -1) {
+              updatedCards.splice(insertIndex, 0, movedCard);
+            } else {
+              updatedCards.push(movedCard);
+            }
+          }
+          setCards(updatedCards);
+        })
+        .catch(error => console.error('Failed to update card order:', error));
     }
   };
 
@@ -376,15 +387,25 @@ const AddCard = ({ column, setCards }) => {
     };
 
     try {
-      const savedCard = await addCardToBackend(newCard);
-      setCards(prevCards => {
-        if (!Array.isArray(prevCards)) return [savedCard];
-        return [...prevCards, savedCard];
+      const response = await fetch('http://localhost:5000/cards', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newCard),
       });
-      setText("");
-      setAdding(false);
+
+      const data = await response.json();
+      
+      if (data.cards) {
+        setCards(data.cards);
+        setText("");
+        setAdding(false);
+      } else if (data.error) {
+        console.error('Error adding card:', data.error);
+      }
     } catch (error) {
-      console.error("Failed to add card:", error);
+      console.error('Error adding card:', error);
     } finally {
       setLoading(false);
     }
@@ -432,53 +453,6 @@ const AddCard = ({ column, setCards }) => {
       )}
     </>
   );
-};
-
-const addCardToBackend = async (card) => {
-  try {
-    const response = await fetch('http://localhost:5000/cards', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(card),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to add card');
-    }
-
-    const data = await response.json();
-    return {
-      id: data._id || data.id,
-      title: data.title,
-      column: data.column
-    };
-  } catch (error) {
-    console.error('Error adding card:', error);
-    throw error;
-  }
-};
-
-const updateCardsOrderInBackend = async (cards) => {
-  try {
-    const response = await fetch('http://localhost:5000/cards', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ cards }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update cards order');
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating cards order:', error);
-    throw error;
-  }
 };
 
 const deleteCardFromBackend = async (cardId) => {

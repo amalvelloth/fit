@@ -1,69 +1,106 @@
+
 const Card = require("../models/Card");
 
 // Get all cards
 const getAllCards = async (req, res) => {
   try {
-    const cards = await Card.find();
-    res.json(cards);
+    const cards = await Card.find().sort({ createdAt: -1 });
+    res.json({ cards }); // Wrap in object for consistent response format
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('Error fetching cards:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Get a card by ID
+const getCardById = async (req, res) => {
+  try {
+    const card = await Card.findById(req.params.id);
+    if (!card) {
+      return res.status(404).json({ message: "Card not found" });
+    }
+    res.status(200).json(card);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
 // Add a new card
 const addCard = async (req, res) => {
-  const card = new Card({
-    title: req.body.title,
-    column: req.body.column,
-  });
-
   try {
-    await card.save();
-    res.status(201).json(card);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    if (!req.body.title || !req.body.column) {
+      return res.status(400).json({ error: "Title and column are required" });
+    }
+
+    const newCard = await Card.create({
+      title: req.body.title,
+      column: req.body.column
+    });
+
+    // Fetch all cards after adding new one
+    const cards = await Card.find().sort({ createdAt: -1 });
+    res.status(201).json({ cards }); // Wrap in object for consistent response format
+  } catch (error) {
+    console.error('Error adding card:', error);
+    res.status(400).json({ error: error.message });
   }
 };
 
 const updateCardColumn = async (req, res) => {
   try {
-      const { cards } = req.body;  // Changed to match your frontend data structure
-      
-      // Update each card in the database
-      const updatePromises = cards.map(card => 
-          Card.findByIdAndUpdate(
-              card.id,
-              { column: card.column },
-              { new: true }
-          )
-      );
-      
-      await Promise.all(updatePromises);
-      res.json({ message: 'Cards updated successfully' });
+    const { _id, title, column } = req.body; // Directly access properties
+
+    console.log("Request Body:", req.body);
+
+    if (!_id) {
+      return res.status(400).json({ error: "Card ID is required" });
+    }
+
+    const updatedCard = await Card.findByIdAndUpdate(
+      _id,
+      { column, title },
+      { new: true }
+    );
+
+    if (!updatedCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+
+    console.log("Updated Card:", updatedCard);
+
+    // Fetch updated list of cards
+    const allCards = await Card.find().sort({ createdAt: -1 });
+    res.json({ cards: allCards });
   } catch (error) {
-      console.error('Error updating cards:', error);
-      res.status(400).json({ error: error.message });
+    console.error("Error updating cards:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+
+
+
 const deleteCard = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const deletedCard = await Card.findByIdAndDelete(id);
-        
-        if (!deletedCard) {
-            return res.status(404).json({ error: "Card not found" });
-        }
-        
-        res.json({ message: 'Card deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting card:', error);
-        res.status(500).json({ error: error.message });
+  try {
+    const { id } = req.params;
+    const deletedCard = await Card.findByIdAndDelete(id);
+    
+    if (!deletedCard) {
+      return res.status(404).json({ error: "Card not found" });
     }
+    
+    // Fetch all remaining cards after deletion
+    const cards = await Card.find().sort({ createdAt: -1 });
+    res.json({ cards }); // Return remaining cards instead of just a message
+  } catch (error) {
+    console.error('Error deleting card:', error);
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = {
   getAllCards,
+  getCardById,
   addCard,
   updateCardColumn,
   deleteCard
