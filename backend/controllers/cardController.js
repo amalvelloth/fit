@@ -50,7 +50,7 @@ const updateCardColumn = async (req, res) => {
   try {
     const { _id, title, column } = req.body; // Directly access properties
 
-    console.log("Request Body:", req.body);
+    // console.log("Request Body:", req.body);
 
     if (!_id) {
       return res.status(400).json({ error: "Card ID is required" });
@@ -66,7 +66,7 @@ const updateCardColumn = async (req, res) => {
       return res.status(404).json({ error: "Card not found" });
     }
 
-    console.log("Updated Card:", updatedCard);
+    // console.log("Updated Card:", updatedCard);
 
     // Fetch updated list of cards
     const allCards = await Card.find().sort({ createdAt: -1 });

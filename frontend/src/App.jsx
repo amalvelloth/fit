@@ -2,7 +2,6 @@ import React from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
-import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import { useState } from 'react';
 import RefrshHandler from './RefrshHandler';
@@ -32,7 +31,6 @@ function App() {
         <Route path='/workoutprograms' element={<WorkoutPrograms />} />
         <Route path='/settings' element={<Settings />} />
         <Route path='/signout' element={<SignOut />} />
-        <Route path='/home' element={<PrivateRoute element={<Home />} />} />
       </Routes>
     </div>
   ); 

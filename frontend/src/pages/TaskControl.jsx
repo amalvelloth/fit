@@ -40,7 +40,7 @@ const Board = () => {
   }, []);
 
   const updateCardsOrderInBackend = async (card) => {
-    console.log("Updating moved card:", card);
+    console.log("Updated moved card:", card);
     
     try {
       const response = await fetch(`http://localhost:5000/cards/${card.id}`, {
@@ -69,11 +69,11 @@ const Board = () => {
   
 
   return (
-    <div className="flex h-full w-full gap-3 overflow-scroll p-12 pt-24">
+    <div className="flex flex-wrap justify-center h-full w-full gap-8 overflow-scroll p-12 pt-24">
       <Column
         title="Backlog"
         column="backlog"
-        headingColor="text-neutral-500"
+        headingColor="text-red-300"
         cards={cards}
         setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
@@ -81,7 +81,7 @@ const Board = () => {
       <Column
         title="TODO"
         column="todo"
-        headingColor="text-yellow-200"
+        headingColor="text-yellow-300"
         cards={cards}
         setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
@@ -89,7 +89,7 @@ const Board = () => {
       <Column
         title="In progress"
         column="doing"
-        headingColor="text-blue-200"
+        headingColor="text-blue-300"
         cards={cards}
         setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
@@ -97,7 +97,7 @@ const Board = () => {
       <Column
         title="Complete"
         column="done"
-        headingColor="text-emerald-200"
+        headingColor="text-emerald-300"
         cards={cards}
         setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
