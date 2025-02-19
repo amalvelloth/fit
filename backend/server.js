@@ -6,6 +6,12 @@ const Card = require("./models/Card");
 
 const app = express();
 
+
+// to check the backend api
+app.get("/ping", (req, res) => {
+  res.send("PONG");
+});
+
 // Middleware
 app.use(express.json());
 app.use(cors());
