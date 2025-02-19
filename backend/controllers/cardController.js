@@ -2,7 +2,7 @@
 const Card = require("../models/Card");
 
 // Get all cards
-const getAllCards = async (req, res) => {
+const getAllCards = async (req, res) => { 
   try {
     const cards = await Card.find().sort({ createdAt: -1 });
     res.json({ cards }); // Wrap in object for consistent response format
@@ -76,6 +76,7 @@ const updateCardColumn = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 

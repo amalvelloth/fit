@@ -40,52 +40,33 @@ const Board = () => {
   }, []);
 
   const updateCardsOrderInBackend = async (card) => {
+    console.log("Updating card:", card);
+    
     try {
-      console.log('Updating card:', card);
-      
       const response = await fetch(`http://localhost:5000/cards/${card.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          _id: card.id,  // Add ID to payload
           title: card.title,
           column: card.column,
-        })
+        }),
       });
-
+  
       if (!response.ok) {
-        throw new Error('Failed to update card');
+        const errorText = await response.text();
+        throw new Error(`Error updating card: ${response.status} - ${errorText}`);
       }
-
+  
       return await response.json();
     } catch (error) {
       console.error('Error updating card:', error);
-      throw error;
     }
   };
   
-  const handleUpdateCards = async (cards) => {
-    try {
-      const response = await fetch(`http://localhost:5000/cards`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cards }),
-      });
-
-      const data = await response.json();
-      
-      if (data.cards) {
-        setCards(data.cards);
-      } else if (data.error) {
-        console.error('Error updating cards:', data.error);
-      }
-    } catch (error) {
-      console.error('Error updating cards:', error);
-    }
-  };
+  
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12 pt-24">
@@ -94,7 +75,7 @@ const Board = () => {
         column="backlog"
         headingColor="text-neutral-500"
         cards={cards}
-        setCards={handleUpdateCards}
+        setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
@@ -102,7 +83,7 @@ const Board = () => {
         column="todo"
         headingColor="text-yellow-200"
         cards={cards}
-        setCards={handleUpdateCards}
+        setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
@@ -110,7 +91,7 @@ const Board = () => {
         column="doing"
         headingColor="text-blue-200"
         cards={cards}
-        setCards={handleUpdateCards}
+        setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
       <Column
@@ -118,13 +99,14 @@ const Board = () => {
         column="done"
         headingColor="text-emerald-200"
         cards={cards}
-        setCards={handleUpdateCards}
+        setCards={setCards}
         updateCardsOrderInBackend={updateCardsOrderInBackend}
       />
-      <BurnBarrel setCards={handleUpdateCards} />
+      <BurnBarrel setCards={setCards} />
     </div>
   );
 };
+
 
 const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrderInBackend }) => {
   const [active, setActive] = useState(false);
