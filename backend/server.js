@@ -21,7 +21,7 @@ app.use("/cards", require('./routes/cardRouter'));
 
 // MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(process.env.MONGO_CONN, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
