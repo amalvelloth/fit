@@ -40,7 +40,7 @@ const Board = () => {
   }, []);
 
   const updateCardsOrderInBackend = async (card) => {
-    console.log("Updating card:", card);
+    console.log("Updating moved card:", card);
     
     try {
       const response = await fetch(`http://localhost:5000/cards/${card.id}`, {
@@ -49,7 +49,7 @@ const Board = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          _id: card.id,  // Add ID to payload
+          _id: card.id,
           title: card.title,
           column: card.column,
         }),
@@ -148,7 +148,6 @@ const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrder
       const [movedCard] = updatedCards.splice(cardIndex, 1);
       movedCard.column = column;
 
-      console.log('Card being updated:', movedCard);
 
       updateCardsOrderInBackend(movedCard)
         .then(() => {
