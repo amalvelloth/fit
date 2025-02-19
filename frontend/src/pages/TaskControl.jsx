@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
@@ -17,7 +17,7 @@ const Board = () => {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch('http://localhost:5000/cards');
+        const response = await fetch('https://fitplus-api.vercel.app/cards');
         if (!response.ok) {
           throw new Error('Failed to fetch cards');
         }
@@ -43,7 +43,7 @@ const Board = () => {
     console.log("Updated moved card:", card);
     
     try {
-      const response = await fetch(`http://localhost:5000/cards/${card.id}`, {
+      const response = await fetch(`https://fitplus-api.vercel.app/cards/${card.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ const AddCard = ({ column, setCards }) => {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/cards', {
+      const response = await fetch('https://fitplus-api.vercel.app/cards', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -438,7 +438,7 @@ const AddCard = ({ column, setCards }) => {
 
 const deleteCardFromBackend = async (cardId) => {
   try {
-    const response = await fetch(`http://localhost:5000/cards/${cardId}`, {
+    const response = await fetch(`https://fitplus-api.vercel.app/cards/${cardId}`, {
       method: 'DELETE',
     });
 
