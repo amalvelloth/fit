@@ -2,12 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
+import DesktopMenu from "../components/DesktopMenu";
 
 export const TaskControl = () => {
   return (
-    <div className="h-screen w-full max-lg:pt-16 bg-neutral-900 text-neutral-50">
-      <Board />
-    </div>
+    <section className="flex">    
+    <DesktopMenu/>
+      <div className="h-screen w-full max-lg:pt-16 bg-neutral-900 text-neutral-50">
+        <Board />
+      </div>
+    </section>
   );
 };
 
@@ -41,7 +45,7 @@ const Board = () => {
 
   const updateCardsOrderInBackend = async (card) => {
     console.log("Updated moved card:", card);
-    
+
     try {
       const response = await fetch(`https://fitplus-api.vercel.app/cards/${card.id}`, {
         method: 'PUT',
@@ -54,23 +58,22 @@ const Board = () => {
           column: card.column,
         }),
       });
-  
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error updating card: ${response.status} - ${errorText}`);
       }
-  
+
       return await response.json();
     } catch (error) {
       console.error('Error updating card:', error);
     }
   };
-  
-  
+
+
 
   return (
-    <div className="flex flex-wrap justify-center h-full w-full gap-8 overflow-scroll p-12 pt-24">
-      <Column
+<div className="flex flex-wrap text-2xl max-sm:text-xl max-lg:justify-center h-full w-full max-xl:overflow-scroll gap-3 p-28">      <Column
         title="Backlog"
         column="backlog"
         headingColor="text-red-300"
@@ -127,9 +130,9 @@ const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrder
     e.preventDefault();
     setDraggedCard(null);
     const cardData = e.dataTransfer.getData("application/json");
-    
+
     if (!cardData) return;
-    
+
     const card = JSON.parse(cardData);
     setActive(false);
     clearHighlights();
@@ -142,7 +145,7 @@ const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrder
     if (before !== card.id) {
       const updatedCards = [...cards];
       const cardIndex = updatedCards.findIndex((c) => c.id === card.id);
-      
+
       if (cardIndex === -1) return;
 
       const [movedCard] = updatedCards.splice(cardIndex, 1);
@@ -234,17 +237,16 @@ const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrder
         onDrop={handleDragEnd}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`h-full w-full transition-colors ${
-          active ? "bg-neutral-800/50" : "bg-neutral-800/0"
-        }`}
+        className={`h-full w-full transition-colors ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"
+          }`}
       >
         {filteredCards.map((card) => (
           <div key={card.id}>
-            <DropIndicator 
+            <DropIndicator
               beforeId={card.id}
-              column={column} 
+              column={column}
             />
-            <Card 
+            <Card
               id={card.id}
               title={card.title}
               column={card.column}
@@ -253,9 +255,9 @@ const Column = ({ title, headingColor, cards, column, setCards, updateCardsOrder
             />
           </div>
         ))}
-        <DropIndicator 
-          beforeId={null} 
-          column={column} 
+        <DropIndicator
+          beforeId={null}
+          column={column}
         />
         <AddCard column={column} setCards={setCards} />
       </div>
@@ -269,14 +271,13 @@ const Card = ({ title, id, column, handleDragStart, isDragging }) => {
       layout
       layoutId={id}
       draggable={true}
-      onDragStart={(e) => handleDragStart(e, { 
+      onDragStart={(e) => handleDragStart(e, {
         id: id,
         title: title,
-        column: column 
+        column: column
       })}
-      className={`cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing ${
-        isDragging ? 'opacity-50' : ''
-      }`}
+      className={`cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing ${isDragging ? 'opacity-50' : ''
+        }`}
     >
       <p className="text-sm text-neutral-100">{title}</p>
     </motion.div>
@@ -316,14 +317,14 @@ const BurnBarrel = ({ setCards }) => {
 
     try {
       const card = JSON.parse(cardData);
-      
+
       if (!card || !card.id) {
         console.error('Invalid card data:', card);
         return;
       }
-      
+
       await deleteCardFromBackend(card.id);
-      
+
       setCards((prevCards) => {
         if (!Array.isArray(prevCards)) return [];
         return prevCards.filter((c) => c.id !== card.id);
@@ -340,11 +341,10 @@ const BurnBarrel = ({ setCards }) => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
-      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
-        active
-          ? "border-red-800 bg-red-800/20 text-red-500"
-          : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
-      }`}
+      className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${active
+        ? "border-red-800 bg-red-800/20 text-red-500"
+        : "border-neutral-500 bg-neutral-500/20 text-neutral-500"
+        }`}
     >
       {active ? <FaFire className="animate-bounce" /> : <FiTrash />}
     </div>
@@ -377,7 +377,7 @@ const AddCard = ({ column, setCards }) => {
       });
 
       const data = await response.json();
-      
+
       if (data.cards) {
         setCards(data.cards);
         setText("");
