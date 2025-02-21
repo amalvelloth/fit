@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Modal from "react-modal";
 import { handleError, handleSuccess } from "../utils";
-import JoggingPNG from "../assets/jogging-bro.png";
+import Element1 from "../assets/element-1.svg";
+import Element2 from "../assets/element-2.svg";
+import SvgBgDesktop from "../assets/svg-bg-desktop.svg";
+import SvgBgMobile from "../assets/svg-bg-mobile.svg";
 
 function Login() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -121,50 +124,52 @@ function Login() {
 
   return (
     <>
-      <section className="flex relative overflow-hidden">
-        <div className="flex col h-screen w-[60%] max-md:w-[70%] justify-center items-center bg-white">
-          <div className="flex-col p-8 max-md:p-2">
-            <img
-              src={JoggingPNG}
-              className="w-full max-w-[400px]"
-              alt="Jogging"
-            />
-            <div className="text">
-              <h1 className="text-black font-extrabold text-5xl max-md:text-3xl max-md:text-[calc(40px+0.5vw)]">
-                "MAKE YOUR FITNESS YOUR DAILY GOAL"
-              </h1>
-            </div>
-            <div className="buttons flex justify-start">
-              <button
-                onClick={openLoginModal}
-                className="rounded-3xl my-5 me-2 border border-black py-2 sm:px-10 max-sm:px-4 font-bold"
-              >
-                Login
-              </button>
-              <button
-                onClick={openRegisterModal}
-                className="rounded-3xl my-5 ms-2 border border-black py-2 sm:px-10 max-sm:px-4 font-bold"
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center h-screen w-[40%] max-md:w-[30%] bg-[#BAFF00] relative overflow-hidden">
-          <div className="w-full rotate-90">
-            <h1 className="scroll-text text-4xl max-lg:text-[calc(18px+0.5vw)] absolute left-0 whitespace-nowrap border p-3 border-black">
-              Running&emsp;Walking&emsp;Cycling&emsp;Hiking&emsp;Running&emsp;Walking&emsp;Cycling&emsp;Hiking&emsp;Running&emsp;Walking&emsp;Cycling&emsp;Hiking
+      <section className="flex w-full h-screen relative overflow-hidden bg-black">
+        <div className="relative flex-col p-8 w-full h-screen max-md:p-2 z-[1]">
+        <div className="absolute right-12 top-3/4 -translate-y-1/2 rotate-90 origin-bottom-right whitespace-nowrap">
+        <h2 className="text-white text-5xl font-bold italic opacity-80">KANBAN BOARD</h2>
+      </div>
+          <img src={Element1} className=" w-[190px] md:w-[250px]" alt="Jogging" />
+          <img src={Element2} className=" w-[130px] md:w-[190px] absolute right-0" alt="Jogging" />
+          <div className="text mt-20">
+            <h1 className="text-white font-extrabold w-3/4 text-5xl max-md:text-3xl max-md:text-[calc(40px+0.5vw)]">
+              Visualize Your Progress
             </h1>
           </div>
+          <div className="buttons flex justify-start">
+            <button
+              onClick={openLoginModal}
+              className="rounded-3xl my-5 me-2 border border-white text-white py-2 sm:px-10 max-sm:px-4 font-bold"
+            >
+              Login
+            </button>
+            <button
+              onClick={openRegisterModal}
+              className="rounded-3xl my-5 ms-2 border border-white text-white py-2 sm:px-10 max-sm:px-4 font-bold"
+            >
+              Sign Up
+            </button>
+          </div>
+
+
         </div>
+        
+
+
+        <img src={SvgBgDesktop} className="w-full bottom-0 left-0 right-0 absolute z-0 blur-[50px] scale-110" alt="" />
+        <img src={SvgBgMobile} className="sm:hidden w-full bottom-0 left-0 right-0 absolute z-0 blur-[30px] scale-110" alt="" />
+
+
+
+
 
         {/* Modal for Login */}
         <Modal
           isOpen={isLoginModalOpen}
           onRequestClose={closeLoginModal}
           contentLabel="Login Modal"
-          className="modal-content w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
-          overlayClassName="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          className="modal-content z-[1001] w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
+          overlayClassName="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]"
         >
           <h2 className="font-bold text-xl text-center">Login</h2>
           <button
@@ -195,7 +200,7 @@ function Login() {
             />
             <button
               type="submit"
-              className="py-2 bg-[#BAFF00] text-black rounded"
+              className="py-2 bg-[#474747] text-white rounded"
             >
               Login
             </button>
@@ -247,7 +252,7 @@ function Login() {
             />
             <button
               type="submit"
-              className="py-2 bg-[#BAFF00] text-black rounded"
+              className="py-2 bg-[#8C8C8C] text-black rounded"
             >
               Sign Up
             </button>

@@ -57,7 +57,7 @@ function BurgerMenu() {
 
             {/* Menu */}
             <div
-                className={`absolute lg:hidden h-screen flex items-center top-0 -left-0  bg-[#BAFF00] z-10 transition-transform duration-500 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`absolute lg:hidden h-screen flex items-center top-0 -left-0  bg-[#8C8C8C] z-10 transition-transform duration-500 ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
             >
                 <ul className='flex flex-col items-start justify-center h-full '>

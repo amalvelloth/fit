@@ -11,7 +11,7 @@ import { PiSignOutBold } from "react-icons/pi";
 function DesktopMenu() {
     return (
         <div
-            className={` max-lg:hidden h-screen min-w-fit flex items-center top-0 -left-0  bg-[#BAFF00] z-10 transition-transform duration-500 translate-x-0'
+            className={` max-lg:hidden h-screen min-w-fit flex items-center top-0 -left-0  bg-[#8C8C8C] z-10 transition-transform duration-500 translate-x-0'
                     }`}
         >
             <ul className='flex flex-col items-start justify-center h-full '>
