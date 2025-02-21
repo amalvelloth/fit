@@ -126,11 +126,11 @@ function Login() {
     <>
       <section className="flex w-full h-screen relative overflow-hidden bg-black">
         <div className="relative flex-col p-8 w-full h-screen max-md:p-2 z-[1]">
-        <div className="absolute right-12 top-3/4 -translate-y-1/2 rotate-90 origin-bottom-right whitespace-nowrap">
-        <h2 className="text-white text-5xl font-bold italic opacity-80">KANBAN BOARD</h2>
-      </div>
-          <img src={Element1} className=" w-[190px] md:w-[250px]" alt="Jogging" />
-          <img src={Element2} className=" w-[130px] md:w-[190px] absolute right-0" alt="Jogging" />
+          <div className="absolute right-1.5 top-20 -rotate-90 origin-bottom-right whitespace-nowrap">
+            <h2 className="opacity-80 bg-gradient-to-r from-black to-[#999999] bg-clip-text text-transparent text-6xl sm:text-7xl font-bold">KANBAN BOARD</h2>
+          </div>
+          <img src={Element1} className=" w-[190px] md:w-[250px] grayscale" alt="Jogging" />
+          <img src={Element2} className=" w-[130px] md:w-[190px] grayscale absolute right-0" alt="Jogging" />
           <div className="text mt-20">
             <h1 className="text-white font-extrabold w-3/4 text-5xl max-md:text-3xl max-md:text-[calc(40px+0.5vw)]">
               Visualize Your Progress
@@ -153,7 +153,7 @@ function Login() {
 
 
         </div>
-        
+
 
 
         <img src={SvgBgDesktop} className="w-full bottom-0 left-0 right-0 absolute z-0 blur-[50px] scale-110" alt="" />
@@ -168,7 +168,7 @@ function Login() {
           isOpen={isLoginModalOpen}
           onRequestClose={closeLoginModal}
           contentLabel="Login Modal"
-          className="modal-content z-[1001] w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
+          className="modal-content z-[9999] w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
           overlayClassName="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]"
         >
           <h2 className="font-bold text-xl text-center">Login</h2>
@@ -209,12 +209,12 @@ function Login() {
 
         {/* Modal for Register */}
         <Modal
-          isOpen={isRegisterModalOpen}
-          onRequestClose={closeRegisterModal}
-          contentLabel="Register Modal"
-          className="modal-content w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
-          overlayClassName="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-        >
+  isOpen={isRegisterModalOpen}
+  onRequestClose={closeRegisterModal}
+  contentLabel="Register Modal"
+  className="modal-content z-[9999] w-full max-sm:w-4/5 max-w-md p-6 bg-white rounded-2xl transform -translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2"
+  overlayClassName="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9998]"
+>
           <h2 className="font-bold text-xl text-center">Sign Up</h2>
           <button
             onClick={closeRegisterModal}

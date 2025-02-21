@@ -6,9 +6,11 @@ import DesktopMenu from "../components/DesktopMenu";
 
 export const TaskControl = () => {
   return (
-    <section className="flex">    
-    <DesktopMenu/>
-      <div className="h-screen w-full max-lg:pt-16 bg-neutral-900 text-neutral-50">
+    <section className="flex bg-neutral-900">
+      <DesktopMenu />
+      <div className="h-full w-full max-lg:pt-16  text-neutral-50">
+        <h2 className="opacity-80 bg-gradient-to-b from-black to-[#999999] bg-clip-text text-transparent text-4xl mt-4 text-center font-bold whitespace-nowrap">KANBAN BOARD</h2>
+
         <Board />
       </div>
     </section>
@@ -73,7 +75,8 @@ const Board = () => {
 
 
   return (
-<div className="flex flex-wrap text-2xl max-sm:text-xl max-lg:justify-center h-full w-full max-xl:overflow-scroll gap-3 p-28">      <Column
+    <div className="flex flex-wrap text-2xl max-sm:text-xl justify-center h-full w-full max-xl:overflow-scroll gap-3 pt-12 sm:pt-28">
+      <Column
         title="Backlog"
         column="backlog"
         headingColor="text-red-300"
